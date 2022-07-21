@@ -18,7 +18,7 @@ public class EmpMapperTest {
 	
 	@Autowired EmpMapper mapper;
 	
-	@Test
+	//@Test
 	public void test() {
 		EmpVO param = new EmpVO();
 		param.setEmployeeId("100");
@@ -31,8 +31,9 @@ public class EmpMapperTest {
 	public void list() {
 		EmpVO param = new EmpVO();
 		param.setDepartmentId("30");
-		List<EmpVO> list = mapper.getEmpList(param);
-		List<EmpVO> list = mapper.getEmpByDept()
-		System.out.println(list);
+		//List<EmpVO> list = mapper.getEmpList(param);
+		List<EmpVO> stringList = mapper.getEmpByDept(new String[] {"10","30","50"});
+		//System.out.println(list);
+		System.out.println(stringList);
 	}
 }

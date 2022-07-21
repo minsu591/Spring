@@ -11,11 +11,16 @@
 	<select id="getEmpList" parameterType="empVO" resultType = "EmpVO">
 		SELECT *
 		FROM EMPLOYEES
-		<where>
-			<if test="departmentId != null">
-				department_id = #{departmentId}
-			</if>
-		</where>
+		ORDER BY employee_id
+	</select>
+	
+	<select id="getEmpByDept" parameterType="String" resultType="EmpVO">
+		SELECT *
+		FROM EMPLOYEES
+		WHERE department_id IN
+		<foreach collection="array" item="dept" open="(" separator="," close=")">
+			#{dept}
+		</foreach>
 		ORDER BY employee_id
 	</select>
 
