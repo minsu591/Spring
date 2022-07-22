@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.company.mvc.emp.EmpMapper">
 
-	<select id="getEmp" resultType="map">
+	<select id="getEmp" resultType="EmpVO">
 		SELECT *
 		FROM EMPLOYEES
 		WHERE EMPLOYEE_ID = #{employeeId}
@@ -14,7 +14,7 @@
 		ORDER BY employee_id
 	</select>
 	
-	<select id="getEmpByDept" parameterType="String" resultType="EmpVO">
+	<select id="getEmpByDept" parameterType="string" resultType="EmpVO">
 		SELECT *
 		FROM EMPLOYEES
 		WHERE department_id IN
@@ -23,5 +23,63 @@
 		</foreach>
 		ORDER BY employee_id
 	</select>
+	
+	<insert id="insert">
+		<selectKey keyProperty="employeeId" order="BEFORE" resultType="string">
+			select NVL(MAX(employee_id),0)+1 FROM employees
+		</selectKey>
+		insert into
+			employees(employee_id,last_name,email,hire_date,job_id)
+			values(employees_seq.nextval, #{lastName},#{email},#{hireDate},#{jobId})
+	</insert>
+	
+	<select id="getEmpReqList" parameterType = "EmpReqVO" resultType="EmpVO">
+		SELECT *
+		FROM employees
+		<where>
+			<if test="employeeId != null and employeeId != ''">
+				AND employee_id = #{employeeId}
+			</if>
+			<if test="depts != null">
+				AND department_id IN
+				<foreach collection="depts" item="dept" open="(" separator="," close=")">
+					#{dept}
+				</foreach>
+			</if>
+			<if test="jobId != null and jobId != ''">
+				AND job_id = #{jobId}
+			</if>
+			<if test="sdt != null and edt != null">
+				AND hire_date BETWEEN #{sdt} AND #{edt}
+			</if>
+		</where>
+		ORDER BY employee_id
+	</select>
+	
+	<update id="update">
+		UPDATE employees
+		SET
+		<if test="firstName != null and firstName != ''">
+			first_name = #{firstName},
+		</if>
+		<if test="lastName != null and lastName != ''">
+			last_name = #{lastName},
+		</if>
+		<if test="hireDate != null">
+			hire_date = #{hireDate},
+		</if>
+		<if test="email != null and email != ''">
+			email = #{email},
+		</if>
+		<if test="jobId != null and jobId != ''">
+			job_id = #{jobId}
+		</if>
+		WHERE employee_id = #{employeeId}
+	</update>
+	
+	<delete id="delete">
+		DELETE employees
+		WHERE employee_id = #{employeeId}
+	</delete>
 
 </mapper>

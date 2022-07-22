@@ -5,10 +5,13 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+	<h1>
+		Hello world!  
+	</h1>
+	<img src="img/dog.jpg"/>
+	<P>  The time on the server is ${serverTime}. </P>
+	<button onclick="location.href='empInsert'">empInsert</button>
+	<button onclick="location.href='empList'">empList</button>
+	<button onclick="location.href='empUpdate'">empUpdate</button>
 </body>
 </html>

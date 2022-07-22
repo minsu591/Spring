@@ -22,9 +22,9 @@ public class EmpMapperTest {
 	public void test() {
 		EmpVO param = new EmpVO();
 		param.setEmployeeId("100");
-		Map<String,Object> result = mapper.getEmp(param);
+		EmpVO result = mapper.getEmp(param);
 		//key값은 나오는대로 다 대문자로 써주기
-		System.out.println(result.get("name"));
+		System.out.println(result);
 	}
 	
 	@Test

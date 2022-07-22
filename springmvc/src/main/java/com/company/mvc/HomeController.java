@@ -27,7 +27,7 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = {"/","/home"}, method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -47,21 +47,6 @@ public class HomeController {
 		vo.setFirstName("hong");
 		vo.setLastName("gildong");
 		return vo;
-	}
-	
-	@Autowired EmpMapper mapper;
-	
-	@RequestMapping("/emp")
-	public String emp(EmpVO vo, Model model) {
-		logger.info("파라미터 : "+vo.toString());
-		model.addAttribute("emp", mapper.getEmp(vo));
-		return "emp";
-	}
-	
-	@RequestMapping("/empList")
-	public String empList(Model model) {
-		model.addAttribute("empList",mapper.getEmpList(null));
-		return "empList";
 	}
 	
 }
