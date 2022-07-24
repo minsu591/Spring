@@ -7,9 +7,29 @@
 		ORDER BY bno
 	</select>
 	
+	<select id="getBoard" resultType="BoardVO">
+		SELECT *
+		FROM tbl_board
+		WHERE bno=#{bno}
+	</select>
+	
 	<insert id="boardInsert">
 		INSERT INTO tbl_board
 		VALUES(board_seq.nextval, #{title},#{content},#{writer},sysdate,sysdate)
 	</insert>
+	
+	<delete id="boardDelete">
+		DELETE tbl_board
+		WHERE bno=#{bno}
+	</delete>
+	
+	<update id="boardUpdate">
+		UPDATE tbl_board
+		SET title = #{title},
+		    content = #{content},
+		    writer = #{writer},
+		    updatedate = sysdate
+		WHERE bno = #{bno}
+	</update>
 
 </mapper>
