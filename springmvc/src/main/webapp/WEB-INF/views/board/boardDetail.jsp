@@ -14,31 +14,95 @@
 <body>
 	<script>
 		$(function(){
+			//실행 부분
 			replyList();
 			replyDelete();
+			replyInsert();
+			replyUpdate();
+			
 			function replyList(){
 				$.ajax({
 					url : "http://localhost/mvc/reply/"+${board.bno}
 				}).done(function(objs){
-					console.log(objs);
 					for(obj of objs){
-						let div = $(`<div data-rno ="\${obj.rno}">
-							<span class="reWriter">\${obj.replyer}</span>
-							<span class="reContent">\${obj.reply}</span>
-							<span class="reDate">\${obj.replydate}</span>
-							<span class="btnReUpd"><button>수정</button></span>
-							<span class="btnReDel"><button>삭제</button></span>
-						</div>`)
-						$("#replyList").append(div)
+						makeDiv(obj);
 					}
 				})
 			}
-			function replyDelete(){
-				$(".btnReDel").click(function(){
-					console.log($(this).parent().parent().data("rno"));
+			
+			function replyInsert(){
+				$("#btnReAdd").click(function(){
 					$.ajax({
-						url : "http://localhost/mvc/reply/"+$(this).data("rno")
+						url : "http://localhost/mvc/reply",
+						method : "post",
+						data : {
+							bno : ${board.bno},
+							reply : $("#reply").val(),
+							replyer : $("#replyer").val()
+						}
+					}).done(function(result){
+						makeDiv(result);
+					}).fail(function(){
+						console.log("댓글 등록 실패");
 					})
+				})
+				
+			}
+			
+			function makeDiv(obj){
+				let div = $(`<div data-rno ="\${obj.rno}">
+					<span class="reWriter">\${obj.replyer}</span>
+					<span class="reContent">\${obj.reply}</span>
+					<span class="reDate">\${obj.replydate}</span>
+					<span class="btnReUpd"><button>수정</button></span>
+					<span class="btnReDel"><button>삭제</button></span>
+				</div>`)
+				
+				$("#replyList").append(div)
+			}
+			
+			function replyDelete(){
+				$("#replyList").on("click","div .btnReDel",function(){
+					let div = $(this).parent();
+					let rno = div.data("rno");
+					$.ajax({
+						url : "http://localhost/mvc/reply/"+rno,
+						method : "delete"
+					}).done(function(result){
+						div.remove();
+					})
+				})
+			}
+			
+			function replyUpdate(){
+				$("#replyList").on("click","div .btnReUpd",function(){
+					let div = $(this).parent();
+					let rno = div.data("rno");
+					let btn = div.children(".btnReUpd");
+					let orgReply = div.children(".reContent").text();
+					let orgReplyer = div.children(".reWriter").text();
+					div.children(".reWriter").contents().unwrap().wrap("<input class='reWriter'>");
+					div.children(".reWriter").val(orgReplyer);
+					div.children(".reContent").contents().unwrap().wrap("<input class='reContent'>");
+					div.children(".reContent").val(orgReply);
+					
+					btn.click(function(){
+						let reply = btn.parent().children(".reContent").val();
+						let replyer = btn.parent().children(".reWriter").val();
+						$.ajax({
+							url : "http://localhost/mvc/reply",
+							method : "put",
+							data : JSON.stringify({reply, replyer, rno}),
+							contentType : "application/json"
+						}).done(function(result){
+							div.children(".reWriter").contents().unwrap().wrap("<span class='reWriter'>");
+							div.children(".reWriter").text(result.replyer);
+							div.children(".reContent").contents().unwrap().wrap("<span class='reContent'>");
+							div.children(".reContent").text(result.reply);
+						})
+					
+					})
+					
 				})
 			}
 		})
@@ -66,9 +130,10 @@
 			<span class="btnReDel"><button>삭제</button></span>
 		</div>
 	</div>
+	<hr>
 	<form>
-		<input name="" id="">작성자
-		<input name="" id="">내용
+		작성자 : <input name="replyer" id="replyer">
+		내용 :<input name="reply" id="reply">
 		<button type="button" id="btnReAdd">댓글 등록</button>
 	</form>
 	

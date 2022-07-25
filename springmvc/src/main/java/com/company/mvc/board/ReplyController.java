@@ -35,7 +35,6 @@ public class ReplyController {
 	
 	@PutMapping("/reply")
 	public ReplyVO update(@RequestBody ReplyVO vo) {
-		System.out.println(vo);
 		mapper.update(vo);
 		return vo;
 	}
