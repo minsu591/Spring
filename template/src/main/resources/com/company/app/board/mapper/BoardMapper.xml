@@ -4,8 +4,8 @@
 
 	<!-- #{type}으로 쓰면 문자열일 경우에 ''가 붙기 때문에 붙이고 싶지 않으면 $사용하기 -->
 	<sql id="criteria">
-		<if test="keyword != null and keyword == ''">
-			and ${type} = #{keyword}
+		<if test="keyword != null and keyword != ''">
+			and ${type} like '%'|| #{keyword} || '%'
 		</if>
 	</sql>
 	
@@ -15,9 +15,12 @@
 		select /*+INDEX_ASC(tbl_board PK_BOARD) */ rownum rn,a.*
 		from tbl_board a
 		where rownum <![CDATA[<=]]>
-		#{pageNum}*#{amount})
+		#{pageNum}*#{amount}
 		<include refid="criteria"></include>
+		order by bno
+		)
 		where rn > (#{pageNum}-1)*#{amount}
+		
 	</select>
 
 	<select id="getTotal" resultType="int">

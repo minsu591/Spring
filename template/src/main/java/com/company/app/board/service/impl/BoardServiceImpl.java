@@ -16,6 +16,7 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired BoardMapper mapper;
 	@Override
 	public List<BoardVO> getBoardList(Criteria cri) {
+		System.out.println("list service");
 		return mapper.getBoardList(cri);
 	}
 	
