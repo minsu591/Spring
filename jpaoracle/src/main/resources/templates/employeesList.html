@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	td, th {
+		border : 1px solid black;
+	}
+</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>employeeId</th>
+			<th>firstName</th>
+			<th>lastName</th>
+			<th>email</th>
+			<th>phoneNumber</th>
+			<th>hireDate</th>
+			<th>jobId</th>
+			<th>salary</th>
+			<th>commissionPct</th>
+			<th>managerId</th>
+			<th>departmentId</th>
+			<th>departmentName</th>
+		</tr>
+		<tr th:each="emp : ${empList}">
+			<td th:text="${emp.employeeId}">ID</td>
+			<td th:text="${emp.firstName}">first_name</td>
+			<td th:text="${emp.lastName}">last_name</td>
+			<td th:text="${emp.email}">email</td>
+			<td th:text="${emp.phoneNumber}">phone_number</td>
+			<td th:text="${emp.hireDate}">hire_date</td>
+			<td th:text="${emp.jobId}">job_id</td>
+			<td th:text="${emp.salary}">salary</td>
+			<td th:text="${emp.commissionPct}">commission_pct</td>
+			<td th:text="${emp.managerId}">manager_id</td>
+			<td th:text="${emp.departments} != null ? ${emp.departments.departmentId} : _"></td>
+			<td th:text="${emp.departments} != null ? ${emp.departments.department_name} : _"></td>
+		</tr>
+	</table>
+</body>
+</html>
