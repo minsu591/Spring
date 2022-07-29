@@ -81,5 +81,72 @@
 		DELETE employees
 		WHERE employee_id = #{employeeId}
 	</delete>
-
+	
+	<!-- <resultMap type="EmpVO" id="empDeptMap">
+		<id column="employee_id" property="employeeId"/>
+		<result column="first_name" property="firstName"/>
+		<result column="last_name" property="lastName"/>
+		<association property="dept" javaType="DeptVO">
+			<id column="department_id" property="departmentId"></id>
+			<result column="department_name" property="department_name"></result>
+			<result column="manager_id" property="manager_id"></result>
+			<result column="location_id" property="location_id"></result>
+		</association>
+	</resultMap> -->
+	
+	<!-- <select id="getEmpDept" resultMap="empDeptMap">
+		SELECT e.*, d.department_name, d.manager_id, d.location_id
+		FROM employees e JOIN departments d
+		ON e.department_id = d.department_id
+	</select> -->
+	
+	<!-- 해당 사원의 부서정보를 가져오기 -->
+	<select id="getEmpDept" resultType="EmpVO">
+		SELECT E.EMPLOYEE_ID,
+			   E.FIRST_NAME,
+			   E.LAST_NAME,
+			   E.EMAIL,
+			   E.PHONE_NUMBER,
+			   E.HIRE_DATE,
+			   E.JOB_ID,
+			   E.SALARY,
+			   E.COMMISSION_PCT,
+			   E.MANAGER_ID,
+			   D.DEPARTMENT_NAME "dept.department_name",
+			   D.LOCATION_ID "dept.location_id",
+			   D.MANAGER_ID "dept.manager_id"
+		FROM employees e JOIN departments d
+		ON e.department_id = d.department_id
+		ORDER BY E.EMPLOYEE_ID
+	</select>
+	
+	<!-- 부서마다 회원정보를 가져오기 -->
+	<resultMap type="DeptVO" id="deptEmpsMap">
+		<id column="department_id" property="departmentId"></id>
+		<result column="department_name" property="department_name"></result>
+		<result column="manager_id" property="manager_id"></result>
+		<result column="location_id" property="location_id"></result>
+		<collection property="emp" ofType="EmpVO">
+			<id column="employee_id" property="employeeId"/>
+			<result column="first_name" property="firstName"/>
+			<result column="last_name" property="lastName"/>
+			<result column="hire_date" property="hireDate"/>
+			<result column="job_id" property="jobId"/>
+		</collection>
+	</resultMap>
+	
+	<select id="getDeptEmp" resultMap="deptEmpsMap">
+		SELECT
+			   D.DEPARTMENT_ID,
+			   D.DEPARTMENT_NAME,
+			   D.LOCATION_ID,
+			   D.MANAGER_ID,
+			   E.EMPLOYEE_ID,
+			   E.FIRST_NAME,
+			   E.LAST_NAME,
+			   E.HIRE_DATE,
+			   E.JOB_ID
+		FROM employees e RIGHT OUTER JOIN departments d
+		ON e.department_id = d.department_id
+	</select>
 </mapper>

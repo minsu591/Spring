@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <p>태그가 포함되어있는 경우</p>
+    <div th:text="${str1}">내용출력</div>
+    <div th:utext="${str1}">내용출력</div>
+    <!-- 없는 값은 없는대로 나옴 -->
+    <div th:utext="${str2}">내용출력</div>
+</body>
+</html>

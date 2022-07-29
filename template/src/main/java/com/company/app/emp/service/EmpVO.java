@@ -18,4 +18,5 @@ public class EmpVO {
 	private String salary;
 	private String departmentId;
 	
+	private DeptVO dept;
 }

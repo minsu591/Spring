@@ -15,5 +15,7 @@ public class EmpMapperTest {
 	
 	@Test
 	public void test() {
+		System.out.println("직원 : " + mapper.getEmpDept());
+		System.out.println("부서 : " + mapper.getDeptEmp());
 	}
 }

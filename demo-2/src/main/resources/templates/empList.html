@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Insert title here</title>
+        <style>
+            table {
+                padding : 5%;
+            }
+            .gray{
+                background-color: gray;
+                color : white;
+            }
+            .green{
+                background-color: green;
+            }
+            tr:hover{
+                background-color : green;
+            }
+
+        </style>
+    </head>
+    <body>
+        <form>
+            부서 <select class="form-control" name="departmentId" id="departmentId">
+                    <option value="">선택</option>
+                    <option th:each="dept : ${depts}" th:text="${dept.departmentName}" th:value="${dept.departmentId}"></option>
+                </select>
+            직무 <select class="form-control" name="jobId" id="jobId">
+					<option value="">선택</option>
+					<option th:each="job : ${jobs}" th:text="${job.jobTitle}" th:value="${job.jobId}"></option>
+				</select>
+        </form>
+
+        <table>
+            <tr>
+                <th>no</th>
+                <th>employee_id</th>
+                <th>first_name</th>
+                <th>last_name</th>
+                <th>email</th>
+                <th>hireDate</th>
+                <th>salary</th>
+                <th>commision_pct</th>
+            </tr>
+                <!--두번째 인수가 상태변수 그거 아니면 empStat식으로 사용하기-->
+                <tr th:each="emp,st : ${empList}" th:class="${st.odd}?'gray':''"
+                	th:onclick="|location.href='@{empUpdate(employeeId=${emp.employeeId})}'|">
+                <td th:text="${st.count}">100</td>
+                <td th:text="${emp.employeeId}" >100</td>
+                <td th:text="${emp.firstName}">scott</td>
+                <td th:text="${emp.lastName}">king</td>
+                <td th:text="${emp.email}">email</td>
+                <td th:text="${#calendars.format(emp.hireDate,'yyyy-MM-dd')}">2020-10-10</td>
+                <td th:text="${#numbers.formatInteger(emp.salary,3,'COMMA')}">2020-10-10</td>
+                <td th:text="${emp.commissionPct}">
+                    <span th:text="${emp.commissionPct}" th:if="${emp.commissionPct != null}">30</span>
+                    <!--th:unless -> 조건이 맞지 않으면 -->
+                    <span th:if="${emp.commissionPct == null}">0</span>
+
+                </td>
+                <td><a th:href="@{empUpdate(employeeId=${emp.employeeId})}">[[${emp.firstName}]]</a></td>
+
+            </tr>
+        </table>
+    </body>
+</html>
